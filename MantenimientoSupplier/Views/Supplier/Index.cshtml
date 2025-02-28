@@ -1,0 +1,96 @@
+﻿@model List<MantenimientoSupplier.Models.sp_SupplierSelectAllResult>
+
+<h2>@ViewBag.Title</h2>
+
+@{
+    var currentPage = ViewBag.CurrentPage as int? ?? 1;
+    var totalPages = ViewBag.TotalPages as int? ?? 1;
+}
+
+<p>
+    @Html.ActionLink("Agregar Nuevo", "Create", "Supplier",
+                     null, new { @class = "btn btn-success" })
+</p>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Listado de Suppliers (página @currentPage de @totalPages)</h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>SupplierName</th>
+                    <th>Address1</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Country</th>
+                    <th>PhoneNumber</th>
+                    <th>Code</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.ID</td>
+                        <td>@item.SupplierName</td>
+                        <td>@item.Address1</td>
+                        <td>@item.City</td>
+                        <td>@item.State</td>
+                        <td>@item.Country</td>
+                        <td>@item.PhoneNumber</td>
+                        <td>@item.Code</td>
+                        <td>
+                            @Html.ActionLink(
+                                linkText: "Editar",
+                                actionName: "Edit",
+                                controllerName: "Supplier",
+                                routeValues: new { id = item.ID },
+                                htmlAttributes: new { @class = "btn btn-warning btn-sm" }
+                            )
+
+                            @Html.ActionLink(
+                                linkText: "Eliminar",
+                                actionName: "Delete",
+                                controllerName: "Supplier",
+                                routeValues: new { id = item.ID },
+                                htmlAttributes: new { @class = "btn btn-danger btn-sm", style = "margin-left:5px;" }
+                            )
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="mt-2">
+            @if (currentPage > 1)
+            {
+                <a href="@Url.Action("Index", new { page = currentPage - 1 })" class="btn btn-primary">Anterior</a>
+            }
+            <span class="mx-2">Página @currentPage de @totalPages</span>
+            @if (currentPage < totalPages)
+            {
+                <a href="@Url.Action("Index", new { page = currentPage + 1 })" class="btn btn-primary">Siguiente</a>
+            }
+            <div class="d-inline-block" style="margin-left:15px;">
+                <label for="pageSelect">Ir a la página:</label>
+                <select id="pageSelect" class="form-control" style="width:auto; display:inline-block;">
+                    @for (int p = 1; p <= totalPages; p++)
+                    {
+                        <option value="@p" @(p == currentPage ? "selected" : "")>@p</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <script>
+            document.getElementById('pageSelect').addEventListener('change', function () {
+                var page = this.value;
+                window.location.href = '@Url.Action("Index", "Supplier")?page=' + page;
+            });
+        </script>
+    </div>
+</div>
+

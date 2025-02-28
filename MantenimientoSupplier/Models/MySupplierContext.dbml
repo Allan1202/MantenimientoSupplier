@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="DataSource" Class="MySupplierContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Table Name="dbo.Supplier" Member="Supplier">
+    <Type Name="Supplier">
+      <Column Name="Country" Type="System.String" DbType="NVarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="HQID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LastUpdated" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="State" Type="System.String" DbType="NVarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SupplierName" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="ContactName" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="Address1" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="Address2" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="City" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="Zip" Type="System.String" DbType="NVarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="EmailAddress" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="WebPageAddress" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Code" Type="System.String" DbType="NVarChar(17) NOT NULL" CanBeNull="false" />
+      <Column Name="DBTimeStamp" Type="System.Data.Linq.Binary" DbType="rowversion" CanBeNull="true" IsVersion="true" />
+      <Column Name="AccountNumber" Type="System.String" DbType="NVarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="TaxNumber" Type="System.String" DbType="NVarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="CurrencyID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PhoneNumber" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="FaxNumber" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="CustomText1" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="CustomText2" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="CustomText3" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="CustomText4" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="CustomText5" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="CustomNumber1" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="CustomNumber2" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="CustomNumber3" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="CustomNumber4" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="CustomNumber5" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="CustomDate1" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="CustomDate2" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="CustomDate3" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="CustomDate4" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="CustomDate5" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Notes" Type="System.String" DbType="NText NOT NULL" CanBeNull="false" />
+      <Column Name="Terms" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SyncGuid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+    </Type>
+    <InsertFunction FunctionId="FunctionId1">
+      <Argument Parameter="supplierName" Member="SupplierName" />
+      <Argument Parameter="address1" Member="Address1" />
+      <Argument Parameter="city" Member="City" />
+      <Argument Parameter="state" Member="State" />
+      <Argument Parameter="country" Member="Country" />
+      <Argument Parameter="phoneNumber" Member="PhoneNumber" />
+      <Argument Parameter="code" Member="Code" />
+    </InsertFunction>
+    <UpdateFunction FunctionId="FunctionId2">
+      <Argument Parameter="iD" Member="ID" />
+      <Argument Parameter="supplierName" Member="SupplierName" />
+      <Argument Parameter="address1" Member="Address1" />
+      <Argument Parameter="city" Member="City" />
+      <Argument Parameter="state" Member="State" />
+      <Argument Parameter="country" Member="Country" />
+      <Argument Parameter="phoneNumber" Member="PhoneNumber" />
+      <Argument Parameter="code" Member="Code" />
+    </UpdateFunction>
+    <DeleteFunction FunctionId="FunctionId3">
+      <Argument Parameter="iD" Member="ID" />
+    </DeleteFunction>
+  </Table>
+  <Function Id="FunctionId3" Name="dbo.sp_SupplierInactive" Method="sp_SupplierInactive">
+    <Parameter Name="ID" Parameter="iD" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Id="FunctionId1" Name="dbo.sp_SupplierInsert" Method="sp_SupplierInsert">
+    <Parameter Name="SupplierName" Parameter="supplierName" Type="System.String" DbType="NVarChar(30)" />
+    <Parameter Name="Address1" Parameter="address1" Type="System.String" DbType="NVarChar(30)" />
+    <Parameter Name="City" Parameter="city" Type="System.String" DbType="NVarChar(30)" />
+    <Parameter Name="State" Parameter="state" Type="System.String" DbType="NVarChar(20)" />
+    <Parameter Name="Country" Parameter="country" Type="System.String" DbType="NVarChar(20)" />
+    <Parameter Name="PhoneNumber" Parameter="phoneNumber" Type="System.String" DbType="NVarChar(30)" />
+    <Parameter Name="Code" Parameter="code" Type="System.String" DbType="NVarChar(17)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.sp_SupplierSelectAll" Method="sp_SupplierSelectAll">
+    <ElementType Name="sp_SupplierSelectAllResult">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierName" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="Address1" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="City" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="State" Type="System.String" DbType="NVarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Country" Type="System.String" DbType="NVarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="PhoneNumber" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="Code" Type="System.String" DbType="NVarChar(17) NOT NULL" CanBeNull="false" />
+      <Column Name="CustomNumber1" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Id="FunctionId2" Name="dbo.sp_SupplierUpdate" Method="sp_SupplierUpdate">
+    <Parameter Name="ID" Parameter="iD" Type="System.Int32" DbType="Int" />
+    <Parameter Name="SupplierName" Parameter="supplierName" Type="System.String" DbType="NVarChar(30)" />
+    <Parameter Name="Address1" Parameter="address1" Type="System.String" DbType="NVarChar(30)" />
+    <Parameter Name="City" Parameter="city" Type="System.String" DbType="NVarChar(30)" />
+    <Parameter Name="State" Parameter="state" Type="System.String" DbType="NVarChar(20)" />
+    <Parameter Name="Country" Parameter="country" Type="System.String" DbType="NVarChar(20)" />
+    <Parameter Name="PhoneNumber" Parameter="phoneNumber" Type="System.String" DbType="NVarChar(30)" />
+    <Parameter Name="Code" Parameter="code" Type="System.String" DbType="NVarChar(17)" />
+    <Return Type="System.Int32" />
+  </Function>
+</Database>
