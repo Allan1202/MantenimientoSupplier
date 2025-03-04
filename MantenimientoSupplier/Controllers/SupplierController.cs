@@ -9,32 +9,16 @@ namespace MantenimientoSupplier.Controllers
     {
         private SupplierRepository _repo = new SupplierRepository();
 
-        public ActionResult Index(int page = 1)
+        public ActionResult Index()
         {
-            var suppliers = _repo.GetAllSuppliers();
-
-            int pageSize = 10;
-            int totalItems = suppliers.Count;
-            int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
-
-            if (page < 1) page = 1;
-            if (page > totalPages && totalPages > 0) page = totalPages;
-
-            var pagedSuppliers = suppliers
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-
-            ViewBag.CurrentPage = page;
-            ViewBag.TotalPages = totalPages;
-            ViewBag.PageSize = pageSize;
-
             if (Session["User"] == null)
             {
                 return RedirectToAction("Login", "Login");
             }
 
-            return View(pagedSuppliers);
+            var suppliers = _repo.GetAllSuppliers();
+
+            return View(suppliers);
         }
 
         public ActionResult Create()

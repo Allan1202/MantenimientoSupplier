@@ -1,96 +1,118 @@
 ﻿@model List<MantenimientoSupplier.Models.sp_SupplierSelectAllResult>
 
-<h2>@ViewBag.Title</h2>
-
 @{
-    var currentPage = ViewBag.CurrentPage as int? ?? 1;
-    var totalPages = ViewBag.TotalPages as int? ?? 1;
+    ViewBag.Title = "Listado de Suppliers";
 }
+
+<h2>@ViewBag.Title</h2>
 
 <p>
     @Html.ActionLink("Agregar Nuevo", "Create", "Supplier",
                      null, new { @class = "btn btn-success" })
 </p>
 
-<div class="card">
-    <div class="card-header">
-        <h3 class="card-title">Listado de Suppliers (página @currentPage de @totalPages)</h3>
-    </div>
-    <div class="card-body">
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>SupplierName</th>
-                    <th>Address1</th>
-                    <th>City</th>
-                    <th>State</th>
-                    <th>Country</th>
-                    <th>PhoneNumber</th>
-                    <th>Code</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@item.ID</td>
-                        <td>@item.SupplierName</td>
-                        <td>@item.Address1</td>
-                        <td>@item.City</td>
-                        <td>@item.State</td>
-                        <td>@item.Country</td>
-                        <td>@item.PhoneNumber</td>
-                        <td>@item.Code</td>
-                        <td>
-                            @Html.ActionLink(
-                                linkText: "Editar",
-                                actionName: "Edit",
-                                controllerName: "Supplier",
-                                routeValues: new { id = item.ID },
-                                htmlAttributes: new { @class = "btn btn-warning btn-sm" }
-                            )
+<table id="supplierTable" class="display" style="width:100%">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>SupplierName</th>
+            <th>Address1</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Country</th>
+            <th>PhoneNumber</th>
+            <th>Code</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ID</td>
+                <td>@item.SupplierName</td>
+                <td>@item.Address1</td>
+                <td>@item.City</td>
+                <td>@item.State</td>
+                <td>@item.Country</td>
+                <td>@item.PhoneNumber</td>
+                <td>@item.Code</td>
+                <td>
+                    <div class="btn-group" role="group">
+                        @Html.ActionLink("Editar", "Edit", "Supplier", new { id = item.ID },
+                            new { @class = "btn btn-warning btn-sm" })
+                        @Html.ActionLink("Eliminar", "Delete", "Supplier", new { id = item.ID },
+                            new { @class = "btn btn-danger btn-sm" })
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
-                            @Html.ActionLink(
-                                linkText: "Eliminar",
-                                actionName: "Delete",
-                                controllerName: "Supplier",
-                                routeValues: new { id = item.ID },
-                                htmlAttributes: new { @class = "btn btn-danger btn-sm", style = "margin-left:5px;" }
-                            )
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <div class="mt-2">
-            @if (currentPage > 1)
-            {
-                <a href="@Url.Action("Index", new { page = currentPage - 1 })" class="btn btn-primary">Anterior</a>
-            }
-            <span class="mx-2">Página @currentPage de @totalPages</span>
-            @if (currentPage < totalPages)
-            {
-                <a href="@Url.Action("Index", new { page = currentPage + 1 })" class="btn btn-primary">Siguiente</a>
-            }
-            <div class="d-inline-block" style="margin-left:15px;">
-                <label for="pageSelect">Ir a la página:</label>
-                <select id="pageSelect" class="form-control" style="width:auto; display:inline-block;">
-                    @for (int p = 1; p <= totalPages; p++)
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('#supplierTable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
                     {
-                        <option value="@p" @(p == currentPage ? "selected" : "")>@p</option>
+                        extend: 'excelHtml5',
+                        text: 'Exportar a Excel',
+                        exportOptions: {
+                            columns: ':visible:not(:last-child)',
+                            modifier: {
+                                page: 'all'
+                            }
+                        },
+                        messageTop: 'Fecha de exportación: ' + new Date().toLocaleString()
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        text: 'Exportar a PDF',
+                        exportOptions: {
+                            columns: ':visible:not(:last-child)',
+                            modifier: {
+                                page: 'all'
+                            }
+                        },
+                        messageTop: 'Fecha de exportación: ' + new Date().toLocaleString(),
+                        pageSize: 'LETTER', 
+                        customize: function (doc) {
+                            doc.defaultStyle.fontSize = 8;
+                            doc.styles.tableHeader.fontSize = 8; 
+                            var footer = function (currentPage, pageCount) {
+                                return {
+                                    columns: [
+                                        { text: 'Página ' + currentPage.toString() + ' de ' + pageCount, alignment: 'right' }
+                                    ],
+                                    margin: [10, 0]
+                                };
+                            };
+                            doc.footer = footer;
+                        }
                     }
-                </select>
-            </div>
-        </div>
-
-        <script>
-            document.getElementById('pageSelect').addEventListener('change', function () {
-                var page = this.value;
-                window.location.href = '@Url.Action("Index", "Supplier")?page=' + page;
+                ],
+                paging: true,
+                searching: true,
+                ordering: true,
+                pageLength: 10,
+                language: {
+                    lengthMenu: "Mostrar _MENU_ registros por página",
+                    zeroRecords: "No se encontraron resultados",
+                    info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                    infoEmpty: "No hay registros disponibles",
+                    infoFiltered: "(filtrado de un total de _MAX_ registros)",
+                    search: "Buscar:",
+                    paginate: {
+                        first: "Primero",
+                        last: "Último",
+                        next: "Siguiente",
+                        previous: "Anterior"
+                    }
+                }
             });
-        </script>
-    </div>
-</div>
-
+        });
+    </script>
+}
